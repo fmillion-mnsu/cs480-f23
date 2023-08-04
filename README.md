@@ -6,6 +6,7 @@
 
 Use the following links to access the course materials:
 
+* [Syllabus](SYLLABUS.md)
 * [Week 1: Introduction and Source Control](week1/README.md)
 * [Week 2: Source Control II](week2/README.md)
 * [Week 3: DevOps](week3/README.md)
