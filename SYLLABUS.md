@@ -14,7 +14,7 @@ Fall 2023, Block 2. Section 1.
 - **Semester/Block**: Fall 2023, Block 2 (10/17/2023 through 11/30/2023), 13 class sessions
 - **Days**: Tuesdays and Thursdays
 - **Time**: 8:00 AM – 9:50 AM
-- **Location:** TE 315
+- **Location:** TE 315 ([Building Map](https://www.mnsu.edu/globalassets/maps/university/buildings/2021/tre_03_thirdfloor_2021.pdf))
 
 ## Instructor
 
@@ -26,7 +26,7 @@ Fall 2023, Block 2. Section 1.
 
 This course will go beyond writing, testing and debugging code by introducing you to several aspects of software development that extend beyond coding. We will cover topics including source code management and control (Git), DevOps (CI/CD), and containerization. We will also discuss the theory behind aspects of software interoperability such as APIs, versioning and cross-platform compatibility. C#, Java and Python will be used as necessary for examples, but there will be only minimal coding in this course.
 
-The goal of this course is to fill in any gaps in your knowledge of the full Software Development Life Cycle (SDLC). 
+The goal of this course is to fill in any gaps in your knowledge of the full Software Development Life Cycle (SDLC).
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ The data on learning and classroom performance shows overwhelmingly that student
 
 ![](images/flipped_classroom.png)
 
-The basic idea of this approach is that you read, watch, and/or study course material before you come to class. We then spend class time working actively with the material in ways that will help you truly understand it deeply, so that you can retain and use the information permanently. 
+The basic idea of this approach is that you read, watch, and/or study course material before you come to class. We then spend class time working actively with the material in ways that will help you truly understand it deeply, so that you can retain and use the information permanently.
 Class Preparation for the Flipped Classroom
 
 You must complete your Class Preparation work before coming to class!
@@ -92,5 +92,55 @@ The rubric for scoring these presentations is as follows:
 
 This course is available on a for-credit, Grade Only basis. You will receive a letter grade in this course. Your final grade will be calculated according to the following rubric on the next page.
 
-Students have the right to ask an instructor for an explanation of any grade received. Grade appeals are reviewed in instances where students perceive that a final course grade is unfair, arbitrary, or capricious. Students must begin the procedures of this policy within two weeks of university notification of a final course grade. Students needing assistance at any step in appealing a grade may contact the Academic Affairs Coordinator of the Student Senate (280 Centennial Student Union; phone 389-2611). Students should retain copies of all materials associated with this process for their records. Students should also have records of their coursework from the class as part of the appeal process. The full policy is available at http://www.mnsu.edu/policies/approved/gradeappeals.pdf.
+Students have the right to ask an instructor for an explanation of any grade received. Grade appeals are reviewed in instances where students perceive that a final course grade is unfair, arbitrary, or capricious. Students must begin the procedures of this policy within two weeks of university notification of a final course grade. Students needing assistance at any step in appealing a grade may contact the Academic Affairs Coordinator of the Student Senate (280 Centennial Student Union; phone 389-2611). Students should retain copies of all materials associated with this process for their records. Students should also have records of their coursework from the class as part of the appeal process. The full policy is available at <http://www.mnsu.edu/policies/approved/gradeappeals.pdf>.
 
+## Diversity Statement
+
+The diversity of the participants in this course is a valuable source of ideas, problem solving strategies, and computational creativity. Our classroom is a place where you will be treated with respect, and we welcome individuals of all ages, backgrounds, beliefs, ethnicities, genders, gender identities, gender expressions, national origins, religious affiliations, sexual orientations, ability, and other visible and nonvisible differences. All members of this class are expected to contribute to a respectful, welcoming and inclusive environment for every other member of the class.
+
+### Name and Pronouns
+
+I will gladly honor your request to address you by an alternate name or gender pronoun. Please advise me of this preference early in the term so that I may make appropriate changes to my records. I also expect other students to respect and honor these requests when interacting in the course. If you are experiencing any disrespect from classmates please come talk to me.
+
+## University Policies
+
+### Academic Honesty
+
+As members of the University community, students assume the responsibility to fulfill their academic obligations in a fair and honest manner. This responsibility includes avoiding inappropriate activities such as plagiarism, cheating, or collusion. Students found responsible for one or more of these activities may face both academic sanctions (such as lowering a grade, failing of a course, etc.) and disciplinary sanctions (such as probation, suspension, or expulsion).
+
+In this course, I encourage you to ask your peers and utilize available online resources for assistance with projects and homework. However, such assistance must not include sharing of code or solutions. All code you submit for your projects or assignments must be written by you alone. Here are some examples:
+
+* Helping your classmate understand why their syntax is causing a compilation error is OK; fixing it for them or providing a copy of your code is not.
+* Studying code online to learn how something is done and then implementing that solution in your own way is OK (as long as you understand and can explain your code); copying and pasting large amounts of code verbatim is not.
+
+If the course includes group projects, the specific requirements for submission of completed work will be outlined for that specific project. Some group projects may allow one submission for the entire group, while others may include both a group submission as well as individual submissions. Unless otherwise noted, you should assume *all* homework is to be completed and submitted **individually**.
+
+The full policy, including definitions of plagiarism, cheating, and collusion, is available at <https://www.mnsu.edu/policies/approved/academichonesty.pdf>.
+
+### Students with Disabilities
+
+Minnesota State Mankato provides students with disabilities reasonable accommodation to participate in educational programs, activities or services, and I strive to make this course accessible and engaging for all learners, including students with disabilities. If you have a disability requiring accommodation to participate in class activities or meet course requirements, you should first register with the Office of Accessibility Resources (if you have not already) by following the process described at <https://mankato.mnsu.edu/university-life/campus-services/accessibility-resources/getting-started/> to establish an accommodation plan. Accessibility Resources will inform me about your needs in the course based on their records.
+
+After this step, you can also reach out to me and I will work with you to ensure all of your accommodations are provided to you and that you can participate fully in the course. Feel free to come to me or e-mail me any time if you are finding the course inaccessible in any way. I am happy to work directly with you to make any reasonable accommodation I can to ensure your success in this course.
+
+### Electronic Recording of Lectures and Materials
+
+Students are not permitted to make unauthorized electronic recordings of lectures or electronic copies of proprietary course materials (e.g., PowerPoints, formulas, lecture notes) using personally owned recording devices (e.g., smartphone, iPad, computer, digital recorder) unless prior permission from the instructor is obtained, and there are no objections from other students.
+
+If you need to record lectures or need course materials for an accessibility reason, please notify the Office of Accessibility Resources, and then discuss the matter with me as soon as possible.
+
+In any case where recording is permitted (even for accessibility purposes), recorded lectures or copied material must be destroyed at the end of the course or semester. Unauthorized downloading, file sharing, or distribution of any part of a recorded lecture or course materials, or using information from such recordings for purposes other than the student’s own learning, may be deemed a violation of Minnesota State University, Mankato’s “Statement of Student Responsibilities,” subject to disciplinary action.
+
+The full policy is available at <http://www.mnsu.edu/atoz/policies/recordingoflecturesandmaterials2015.pdf>.
+
+### Missed Classes
+
+Students represent the university through participation in university sponsored or sanctioned activities, such as the arts, theater, music, dance, forensics, and intercollegiate athletics. If an activity schedule conflicts with academic obligations, students will follow a standard protocol to provide their faculty members with prior, written notification of their absences from classes. Faculty members will determine, in consultation with students, how missed classes and assignments will be made-up in a manner that fulfills academic obligations and accommodates participatory obligations. Except for absences resulting from sponsored or sanctioned activities, student participants have the same responsibility with regard to class attendance and assignments as do all other students.
+
+The full policy is available at <http://www.mnsu.edu/atoz/policies/missedclassesandmakeupwork.pdf>.
+
+If you need to miss class for an important non-school-related reason (e.g., a medical appointment), please let me know ahead of time, as early as possible. I understand that sometimes extenuating circumstances may arise suddenly without warning. In this case, please contact me by E-mail as soon as you possibly can to let me know you will be unable to attend class and/or meet a deadline. Within reason we will work together to come up with a solution. The more openly we communicate, the easier it is for me to accommodate your situation!
+
+### Veterans Information
+
+As a particular acknowledgment of an individual's service to our country, faculty members are committed to providing resources to veterans/military students, which will assist in smooth navigation of the university environment and a successful educational experience. Resources for veterans are available at <http://www.mnsu.edu/veterans/resources>. *Student veterans and current military members with special circumstances or who are activated are encouraged to notify the instructor.*
