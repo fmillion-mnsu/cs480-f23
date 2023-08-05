@@ -24,7 +24,7 @@ Fall 2023, Block 2. Section 1.
 
 ## Course Description
 
-This course will go beyond writing, testing and debugging code by introducing you to several aspects of software development that extend beyond coding. We will cover topics including source code management and control (Git), DevOps (CI/CD), and containerization. We will also discuss the theory behind aspects of software interoperability such as APIs, versioning and cross-platform compatibility. C#, Java and Python will be used as necessary for examples, but there will be only minimal coding in this course.
+This course will go beyond writing, testing and debugging code by introducing you to several aspects of software development that extend beyond coding. We will cover topics including source code management and control (Git), DevOps (CI/CD), and containerization. We will also discuss the theory behind aspects of software interoperability such as APIs, versioning and cross-platform compatibility. C&#x266F;, Java and Python will be used as necessary for examples, but there will be only minimal coding in this course.
 
 The goal of this course is to fill in any gaps in your knowledge of the full Software Development Life Cycle (SDLC).
 
@@ -32,7 +32,7 @@ The goal of this course is to fill in any gaps in your knowledge of the full Sof
 
 Admission to the upper division Computer Science program is required.
 
-This course is aimed at students who know at least two programming languages at a basic, functional level. We will use Python, Java and C# as appropriate, but we will not be focusing on writing code - the only instances where you will write actual code in "traditional" programming languages is in support of the other aspects of the SDLC that we will be covering.
+This course is aimed at students who know at least two programming languages at a basic, functional level. We will use Python, Java and C&#x266F; as appropriate, but we will not be focusing on writing code - the only instances where you will write actual code in "traditional" programming languages is in support of the other aspects of the SDLC that we will be covering.
 
 > For example, one of our units will cover software versioning and API interoperability. For this unit, you will be given code for a working API and a scenario to add a new feature (along with its code) while maintaining compatibility with current users of the API. You will only need to write code to connect these pieces together.
 
@@ -108,10 +108,11 @@ I will gladly honor your request to address you by an alternate name or gender p
 
 As members of the University community, students assume the responsibility to fulfill their academic obligations in a fair and honest manner. This responsibility includes avoiding inappropriate activities such as plagiarism, cheating, or collusion. Students found responsible for one or more of these activities may face both academic sanctions (such as lowering a grade, failing of a course, etc.) and disciplinary sanctions (such as probation, suspension, or expulsion).
 
-In this course, I encourage you to ask your peers and utilize available online resources for assistance with projects and homework. However, such assistance must not include sharing of code or solutions. All code you submit for your projects or assignments must be written by you alone. Here are some examples:
+In this course, I encourage you to ask your peers and utilize available online resources for assistance with projects and homework. However, such assistance must not include sharing or copying of code or solutions. All code you submit for your projects or assignments must be written by you alone. Here are some examples:
 
-* Helping your classmate understand why their syntax is causing a compilation error is OK; fixing it for them or providing a copy of your code is not.
-* Studying code online to learn how something is done and then implementing that solution in your own way is OK (as long as you understand and can explain your code); copying and pasting large amounts of code verbatim is not.
+* Helping your classmate understand why their syntax is causing a compilation error is OK; fixing it for them or providing a copy of your code to your classmate is not.
+* Asking a classmate or online forum a question about why your code is not doing what you expect it to, and receiving answers guiding you to a solution that you implement yourself, is OK; asking someone to fix the code *for* you or simply provide you with working code is not.
+* Studying code online to learn how something is done and then implementing that solution in your own way is OK (as long as you understand and can explain your code); copying and pasting large amounts of code verbatim is not. **This also applies to code generated using artificial intelligence tools**.
 
 If the course includes group projects, the specific requirements for submission of completed work will be outlined for that specific project. Some group projects may allow one submission for the entire group, while others may include both a group submission as well as individual submissions. Unless otherwise noted, you should assume *all* homework is to be completed and submitted **individually**.
 
