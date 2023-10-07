@@ -12,16 +12,16 @@ Fall 2023, Block 2. Section 1.
 ## Class Time and Place
 
 - **Semester/Block**: Fall 2023, Block 2 (10/17/2023 through 11/30/2023), 13 class sessions
-- **Days and Time**: Tuesdays and Thursdays, 8:00 AM - 9:50 AM ([iCalendar File](cs480.ics))
+- **Days and Time**: Tuesdays and Thursdays, 8:00 AM - 9:50 AM ([iCalendar File](https://github.com/fmillion-mnsu/cs480-f23/raw/master/cs480.ics))
 - **Location:** TE 315 ([Building Map](https://www.mnsu.edu/globalassets/maps/university/buildings/2021/tre_03_thirdfloor_2021.pdf))
 
 ## Instructor
 
 - **Name**: Flint D. Million (he/him)
 - **Email**: flint.million@mnsu.edu
-- **Office / Student Support Hours**: TBD
+- **Office / Student Support Hours**: By Appointment
 
-It's important to me that I be available to help you succeed in this course. If you need to contact me, please send me an E-mail. I try to answer all emails within 24 hours, including weekends. If I have not responded to your E-mail message after 24 hours, please resend the message in case it got lost or buried. *Do not feel you need to wait longer than 24 hours* to resend your message - I would rather see your message more than once than miss your questions!
+It's important to me that I be available to help you succeed in this course. If you need to contact me, please send me an E-mail. I try to answer all emails within 24 hours, including weekends - even if I need more time to respond, I will acknowledge receipt of your message. If I have not responded to your E-mail message after 24 hours, please resend the message in case it got lost or buried. *Do not feel you need to wait longer than 24 hours* to resend your message - I would rather see your message more than once than miss your questions!
 
 If you would like to meet with me directly, you can schedule time with me to meet in my office or in the CS Project space. Please contact me via E-mail or before or after class and I will accommodate your time schedule to the best of my ability.
 
@@ -47,7 +47,7 @@ You will be participating in in-class activities that require a laptop to be bro
 
 D2L will be used to provide you with course announcements, homework assignments, course materials and quizzes. Official course announcements will also be sent to you via your university E-mail address. You are responsible for regularly checking D2L and your university E-mail for communications.
 
-Some projects in this course will make use of cloud services. While we will be discussing use of commercial cloud providers such as Amazon AWS or Microsoft Azure, you will not need to use these services in this course as I will be providing you with access to a cloud server for the course. You may of course choose to use a commercial service if you wish, but you will need to be cognizant of any potential fees you may incur.
+Some projects in this course will make use of cloud services. While we will be discussing use of commercial cloud providers such as Amazon AWS or Microsoft Azure, you will not need to use these services in this course as I will be providing you with access to a cloud server for the course. You may of course choose to use a commercial service if you wish, but you will need to be cognizant of any potential fees you may incur, and you will need to arrange for me to be able to access your resources for grading purposes.
 
 ## Course Philosophy &ndash; The “Flipped Classroom”
 
@@ -70,16 +70,15 @@ Before each class, you should spend significant time doing the following:
 During our scheduled classroom time, we will engage actively with the material, utilizing activities including:
 
 - Students making individual short presentations on assigned topics
-- Group discussions about the content
-- Small team sessions focused on solving specific technical exercises and programming problems directly related to the homework
-- Short content reviews led by the instructor
+- Class discussions about the content
+- Group sessions focused on solving specific technical exercises and programming problems related to the course project
 
 The main benefits of taking this “Flipped Classroom” approach are:
 
 1. As a student, you get a significant amount of personal attention from the instructor
 2. As the instructor, I have clear insight into how you personally are doing with the course material, so that I do my best to help you
 3. You, as a student, learn much more overall, and absorb what you learn much more deeply and permanently
-4. It’s a much more efficient use of your 80 hours for the course
+4. It’s a much more efficient use of your time for the course
 5. It’s much more fun than sitting in lectures and then struggling on your own with homework!
 
 ## Individually Assigned Short Presentations
@@ -144,10 +143,10 @@ As members of the University community, students assume the responsibility to fu
 
 In this course, I encourage you to ask your peers and utilize available online resources for assistance with projects and homework. However, such assistance must not include sharing or copying of code or solutions. All code you submit for your projects or assignments must be written by you alone. Here are some examples:
 
-* Helping your classmate understand why their syntax is causing a compilation error is OK; fixing it for them or providing a copy of your code to your classmate is not.
-* Asking a classmate or online forum a question about why your code is not doing what you expect it to, and receiving answers guiding you to a solution that you implement yourself, is OK; asking someone to fix the code *for* you or simply provide you with working code is not.
+* Helping your classmate or another group understand why their syntax is causing a compilation error is OK; fixing it for them or providing a copy of your code to your classmate is not.
+* Asking a classmate, group or online forum a question about why your code is not doing what you expect it to, and receiving answers guiding you to a solution that you implement yourself, is OK; asking someone to fix the code *for* you or simply provide you with working code that you will use as-is is not.
 * Studying code online to learn how something is done and then implementing that solution in your own way is OK (as long as you understand and can explain your code); copying and pasting large amounts of code verbatim or with only very minimal changes is not. 
-* **Artificial Intelligence Policy:** I treat code generated with artificial intelligence the same way I treat code obtained from a human-generated source (website post, book, classmate&hellip;). In other words, you *may* ask an AI system for assistance with your code and you may study code generated by the AI for ideas; however, you may ***not*** copy code provided by an AI engine verbatim or with only very minimal modification. As with any code you submit, you must fully understand and be able to defend your code.
+* **Artificial Intelligence Policy:** I treat code generated with artificial intelligence the same way I treat code obtained from a human-generated source (website post, book, classmate&hellip;). In other words, you *may* ask an AI system for assistance with your code and you *may* study code generated by the AI for ideas; however, you ***may not*** copy code provided by an AI engine verbatim or with only very minimal modification. As with any code you submit, you must fully understand and be able to defend your code.
 
 > I exercise common sense in enforcing these policies. For example, if you discover that there is one single well-established strategy for accomplishing a given generic task and a template implementing that method is provided, and coding an alternative strategy would be excessively awkward or would create other secondary issues (e.g. insecure code, slower performance, etc.), then using such a template is not considered "copying and pasting large amounts of code verbatim". 
 >
@@ -157,7 +156,7 @@ In this course, I encourage you to ask your peers and utilize available online r
 >
 > If you have further questions on this policy, or want to ask about a specific scenario, please feel free to ask me. 
 
-If the course includes group projects, the specific requirements for submission of completed work will be outlined for that specific project. Some group projects may allow one submission for the entire group, while others may include both a group submission as well as individual submissions. Unless otherwise noted, you should assume *all* homework is to be completed and submitted **individually**.
+This course includes a group project. For the group project, specific requirements for submission of completed work will be outlined for that specific project. Each group will submit both a final group project deliverable *in addition to* individual submissions. For all work outside the group project, unless otherwise noted, you should assume *all* homework is to be completed and submitted **individually**.
 
 The full policy, including definitions of plagiarism, cheating, and collusion, is available at <https://www.mnsu.edu/policies/approved/academichonesty.pdf>.
 
