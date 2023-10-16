@@ -14,3 +14,7 @@ Use the following links to access the course materials:
 * [Week 5: DevOps II](week5/README.md)
 * [Week 6: Containerization](week6/README.md)
 * [Week 7: Containerization, Extra Topics, Wrap-Up!](week7/README.md)
+
+## Resources:
+
+* [Presentation Guide](PRESENTATIONS.md)

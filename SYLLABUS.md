@@ -83,7 +83,9 @@ The main benefits of taking this “Flipped Classroom” approach are:
 
 ## Individually Assigned Short Presentations
 
-For each class session (not including the first one), a few students (typically three or four) will be assigned one specific presentation topic each on a narrow topic related to the week’s main topic of discussion. When you are assigned a topic, you should prepare a short (5-10 minute) presentation that covers the basics of the assigned topic. You will produce a PowerPoint or similar presentation with a few slides – no need to go beyond 3 or 4 slides maximum. Materials related to each topic will be provided for you to study on D2L, and you are also free to use other resources in your study. If you do utilize other sources, please include references in your presentation – this will also help your fellow classmates with additional resources to aid their study!
+For each class session (not including the first one), a few students (typically two or three) will be assigned one specific presentation topic each on a narrow topic related to the week’s main topic of discussion. When you are assigned a topic, you should prepare a short (10-15 minute) presentation that covers the basics of the assigned topic. You will produce a PowerPoint or similar presentation with a few slides – no need to go beyond 3 or 4 slides maximum. Materials related to each topic will be provided for you to study on D2L, and you are also free to use other resources in your study. If you do utilize other sources, please include references in your presentation – this will also help your fellow classmates with additional resources to aid their study!
+
+You will present *two times* during the semester.
 
 Individual presentation assignments will be posted on D2L and via E-mail with the greatest possible advance notice.
 
@@ -92,6 +94,8 @@ The rubric for scoring these presentations is as follows:
 - Correct coverage of topic material: **60%**
 - Clarity of spoken presentation: **25%**
 - Quality of presentation slides: **15%**
+
+For more information and specific grading criteria see the[Individual Presentation Guide](PRESENTATIONS.md).
 
 ## Group Project
 
