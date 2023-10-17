@@ -122,8 +122,8 @@ Item | Percent
 Attendance | 5%
 Individual Presentations | 25%
 Individual Assignments | 20%
-Group Assignment | 30%
-Quizzes | 20%
+Group Assignment | 35%
+Quizzes | 15%
 
 There will be no final exam for this course. The work you do in your group assignment will be ongoing throughout the semester and your grade will be based on your contribution to your group's project and the final deliverable. 
 
