@@ -6,6 +6,8 @@ As part of this course, you will deliver two presentations to the class on topic
 
 To prepare for your presentation, I will provide resource guides for each week in this repository. The resource guides will give you the basic information you need and some key points to consider, but will *not* include all of the substance, context and details you should include in your presentation. Spend some time doing your own research to obtain additional information. It's also great to tell a short personal anecdote or story for added context if you have one!
 
+It's also a great idea to include a list of references in your presentation - this can simply be websites you used when putting together your material (no need to cite in any particular academic format). 
+
 ### Scoring Rubric
 
 Presentations are scored on a 0-5 scale for three criteria. The following is the scoring rubric for presentations:
