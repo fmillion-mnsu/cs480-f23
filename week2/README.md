@@ -68,7 +68,7 @@ There's also a bunch of general options that can apply to many other Git command
 
 *You may include information on third party tooling for merges as well, just make sure you include some background on these options and what options, if any, a third party tool supports.*
 
-## Discussion: Git Histories
+## Discussion: Git History Viewing
 
 The magic command for this discussion: `git log`. 
 
