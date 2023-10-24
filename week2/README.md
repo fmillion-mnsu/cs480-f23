@@ -2,6 +2,17 @@
 
 Let's dive into some advanced Git techniques! Remember for your presentations - this guide gives you the essential information, but you should spend time doing some of your own research to come up with additional details for your presentation!
 
+## Presentations:
+
+### Tuesday:
+* [Advanced Git Merging](#discussion-advanced-git-merging)
+* [Git History](#discussion-git-history-viewing)
+
+### Thursday:
+* [Git Stashing and Worktrees](#discussion-stashing-and-worktrees)
+* [Bisecting and Blaming](#discussion-bisecting-and-blaming)
+* [Rebasing (and other ways to rewrite history)](#discussion-rebasing-and-history-rewriting)
+
 ## Discussion: Advanced Git Merging
 
 Git merging is a complex topic! For example, how does Git know when a merge conflict has occurred? How does it deal with, say, a big insertion in a file that pushes a bunch of other unchanged content down to later lines? What about more complex merges with more divergent histories? What if, for some reason, you need to do a merge but you really don't care what the other branch contains and just want your code as-is to be the result of the merge?
@@ -160,3 +171,112 @@ If you expect that the extra working directory might get moved or deleted but yo
 Just like with any other command accepting references, you can also create a worktree based on a tag, a specific commit, or a relative commit like `HEAD~2`. 
 
 Both of these commands have some extra options that you should take the time to explore!
+
+## Bisecting and Blaming
+
+A push to production! All looks well. Right? Seems OK. I'm gonna crawl into bed now! No calls to the 24 hour help line. No pings from the uptime monitor. No alarms in the logging... oh wait... uh oh... oh no... 
+
+*\*buzz buzz\**
+
+It all started with that one notification. "Error message found in server log." You tap the notification, thinking maybe it's no big deal. Maybe it's just something lagging. Maybe it's something out of our control...
+
+    Traceback (most recent call last):
+      File "api.py", line 65, in process_login
+    ValueError: invalid value for 'uid'
+
+You feel the blood pressure rising. That nice night of sleep is not to be. This is the third night you've been shortchanged on sleep. Eventually it's going to catch up with you. You already started nodding off during the day today...
+
+Yawning, you get up and go to your computer and login. Time to start debugging. You look through the code that's on the `production` branch and find something strange. *How is that value being passed for `uid`?* You know for a fact this wasn't there in the last push to production a couple weeks ago. Since then there's been literally thousands of commits. How did this pass unit testing and QA? But more importantly, *when did this get introduced?*
+
+Git has two functions that will help you point the finger: `bisect` and `blame`. Bisect lets you search through a huge commit history to find exactly where a change occurred, and Blame lets you identify exactly who made the commit that caused the change. Nifty, eh? Only thing you have to hope for now is that it wasn't somehow your own mistake, caused by another sleepless night last week...
+
+### `git bisect`
+
+> **A little detour: the binary search (bisection) algorithm**
+>
+> At some point you've probably heard this puzzle: In a phone book of 1,000 pages, assuming all entries are alphabetical, what is the maximum number of pages I would need to look at to find a specific name? (Pretend it's a history buff asking&ndash;someone who still actually uses those big thick bound stacks of paper.)
+> 
+> The solution to this puzzle is pretty neat. You open to the exact middle of the phone book first. Then you look to see if the name that you are looking for is alphabetically *before* or *after* the entries on that page. (You might get lucky and you might find the entry on that very page.) If the name you're looking for is *before* the current page, you throw out the second half of the book; if it's *after*, you throw out the first half.
+> 
+> Now you repeat the process. You turn to the middle page for the section you still have. Is the name before or after the entries on this page? Repeat the same process of ripping the book in half again and keeping only the half that might contain your entry. (If you find your entry on the page in question, you're done - "`break` out of the `for` loop.")
+> 
+> If you continue doing this, you'll find that after 10 iterations, you'll be left with one page. The entry you're looking for will be on that page! (Unless it's not in the phone book at all, in which case maybe your friend got rid of their landline phone.)
+> 
+> What's neat about this binary search algorithm is that it scales *logarithmically*. Consider the same exercise, but for a phone book containing 10,000 pages. (You'll only need a maximum of 14 iterations.) What about a phone book containing a listing for every single human being in the world, spanning well over 100 million pages? Assuming the book is alphabetical, you can still find a specific person's page in less than **27** iterations!
+
+The `git bisect` command lets you use the binary search strategy to search through a Git history and find where a change occurred. Even on the *largest* repositories with *tens of thousands* of commits, this operation will only take you a couple of minutes (probably no more than 14 tries or so!) - and maybe even less, since you can even have `bisect` run a command for you to help you determine quickly if the change exists in the current commit!
+
+The basic steps for a Git bisect operation are as follows:
+
+1. Find a commit where the problem doesn't exist. In our scenario, perhaps it's the last production merge, or it's a `tag` for the previous published version. If you have no idea, you *could* go all the way back to the initial commit, but this will probably end up wasting more time - it's best if you can find a single commit that you know does not have the problem. *Make a note of this commit - its commit hash, its tag, etc.*
+2. Switch to a commit that you know has the problem. This might be the current production commit, your current `HEAD`, etc.
+3. Run `git bisect start` and `git bisect bad`. This tells `git` to start the bisect operation, and also that you're sitting on a commit with the problem.
+4. Run `git bisect good <commit_id>` to tell `git` where you know the problem doesn't exist. 
+5. Now run `git bisect` on its own. This will checkout a commit that's exactly in between the two commits you specified. Look to see if the problem exists.
+    * If so, run `git bisect bad`.
+    * If not, run `git bisect good`.
+6. Keep repeating step 5 until you run out of commits to test. This will take "log-base-2 of n" iterations at most, with `n` being the number of commits in the range you initially specified. (There's that binary search algorithm at work - just like the phone book example!)
+7. Eventually, once you run out of commits to try, you'll have landed on the commit where the problem initially surfaced! Now you can go on to figuring out who to blame (more on that in a moment).
+8. You can make note of which commit you're on and then run `git bisect reset` to get back to where you started prior to starting the bisect operation.
+    * You can optionally switch to a different commit, branch, etc. with `git bisect reset <commit_id>`
+
+> **Hint:** You can use the terms `old` and `new` instead of `good` and `bad`. This might be useful if you're not looking for something that *broke*, but rather just looking for which commit introduced a change, a new feature, new strings, etc. You have to pick one set or the other - you can't suddenly start using `old` and `new` after starting a bisect using `good` and `bad`.
+>
+> You can type `git bisect terms` to know which terms are currently in use.
+
+While you are bisecting, you have a few options:
+
+* `git bisect log` will show you what you've done so far - which commits you've deemed good and bad. 
+* `git bisect run <command> [args]` will let you run a command that automatically determines whether each commit is good or bad. 
+  * If you're good at scripting, you can use this to *automate* the bisecting process. Your command needs to use shell return values to indicate `good` or `bad`: `0` means the commit is `good` (or `old`) and `1` means the commit is `bad` (or `new`). 
+  * If you're crafty with command line tools like `grep` you can easily find which commit a change was introduced in. You could alternatively write a Python script, a Java program, whatever you feel most comfortable with, that tests the codebase for the change you're interested in.
+  * Another common scenario is to run the command which compiles a program to determine at which commit the compilation broke. 
+  * The program can return a special return value of `125` to indicate that this particular commit should be `skip`ped. Skipping commits may be useful if they are irrelevant to your test case.
+* `git bisect skip` to ignore the current commit. You can also give a specific commit or a range of commits (separated by .. - e.g. `1234abc..9876fed`). Commits that are `skip`ped will not be included in the bisect operation - it's basically as if those pages are missing from the phonebook.
+
+Ok, you've found the commit. You can use `git log` to view the commit history from your current position and you'll see who made the commit. It's *that guy* again! I swear, his manager is gonna get a call...
+
+But wait! Just because the *commit* is authored by *that guy*, it doesn't necessarily mean he's the one who introduced the bug. For example, perhaps the commit was merging in some changes from another branch. Git does have a command that can show us when each individual line of a file was committed and who it was committed by, however - this works across merges (except squashed ones) and branches as well. 
+
+### `git blame`
+
+Just like a good insurance company, everything that happens in a Git repository is someone's fault. This command is luckily quite a bit simpler than `git bisect` because it's just one command. To use `git blame`, just checkout the commit where the change occurred, and then type `git blame <filename>`. You'll be greeted with a view like this:
+
+    457c899653991 (Thomas Gleixner           2019-05-19 13:08:55 +0100   1) // SPDX-License-Identifier: GPL-2.0-only
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700   2) /*
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700   3)  *  linux/kernel/panic.c
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700   4)  *
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700   5)  *  Copyright (C) 1991, 1992  Linus Torvalds
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700   6)  */
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700   7)
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700   8) /*
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700   9)  * This function is used through-out the kernel (including mm and fs)
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700  10)  * to indicate a major problem.
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700  11)  */
+    c95dbf27e2015 (Ingo Molnar               2009-03-13 11:14:06 +0100  12) #include <linux/debug_locks.h>
+    b17b01533b719 (Ingo Molnar               2017-02-08 18:51:35 +0100  13) #include <linux/sched/debug.h>
+    c95dbf27e2015 (Ingo Molnar               2009-03-13 11:14:06 +0100  14) #include <linux/interrupt.h>
+    7d92bda271ddc (Douglas Anderson          2019-09-25 16:47:45 -0700  15) #include <linux/kgdb.h>
+    456b565cc52fb (Simon Kagstrom            2009-10-16 14:09:18 +0200  16) #include <linux/kmsg_dump.h>
+    c95dbf27e2015 (Ingo Molnar               2009-03-13 11:14:06 +0100  17) #include <linux/kallsyms.h>
+    c95dbf27e2015 (Ingo Molnar               2009-03-13 11:14:06 +0100  18) #include <linux/notifier.h>
+    c7c3f05e341a9 (Sergey Senozhatsky        2018-10-25 19:10:36 +0900  19) #include <linux/vt_kern.h>
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700  20) #include <linux/module.h>
+    c95dbf27e2015 (Ingo Molnar               2009-03-13 11:14:06 +0100  21) #include <linux/random.h>
+    de7edd31457b6 (Steven Rostedt (Red Hat)  2013-06-14 16:21:43 -0400  22) #include <linux/ftrace.h>
+    ^1da177e4c3f4 (Linus Torvalds            2005-04-16 15:20:36 -0700  23) #include <linux/reboot.h>
+    c95dbf27e2015 (Ingo Molnar               2009-03-13 11:14:06 +0100  24) #include <linux/delay.h>
+    c95dbf27e2015 (Ingo Molnar               2009-03-13 11:14:06 +0100  25) #include <linux/kexec.h>
+    f39650de687e3 (Andy Shevchenko           2021-06-30 18:54:59 -0700  26) #include <linux/panic_notifier.h>
+
+Look at that - every single line in the file is listed along with *who last committed a change to it* (such as changing or adding it)! *Now* we can catch that rascal who insisted on being careless (or maybe malicious...?) by inserting that bad value into our source code!
+
+You can alter the output of `git blame` in a couple of ways by using these command line switches:
+
+* `--show-stats` shows some statistics at the end of the output. The most interesting one is `num commits`, which tells you how many commits have contributed to this file's current state.
+* `-M` and `-C` tells `git blame` to also look for lines that were *moved* or *copied* (but not *changed*) within the file (`-M`) or within other files in the same commit (`-C`). `blame` will show these changes normally but you'll only see half of the change. This will make sure you see both ends of the change.
+* `-e` to include the email field from the commit
+* `-s` to *not* include the author name field from the commit.
+* And many others - look at the documentation for `git-blame` for details.
+
+You'll be doing a fun activity in class where you'll find out just *which* one of your scoundrel classmates broke the code!
