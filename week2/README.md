@@ -172,7 +172,7 @@ Just like with any other command accepting references, you can also create a wor
 
 Both of these commands have some extra options that you should take the time to explore!
 
-## Bisecting and Blaming
+## Discussion: Bisecting and Blaming
 
 A push to production! All looks well. Right? Seems OK. I'm gonna crawl into bed now! No calls to the 24 hour help line. No pings from the uptime monitor. No alarms in the logging... oh wait... uh oh... oh no... 
 
@@ -352,7 +352,7 @@ If you know the exact filename, you can blast away the file from your current hi
 
 The `filter-branch` command is complex and we won't spend a whole lot more time on it here, but you should read the documentation on the command if you want to learn more about its options. You can do a lot more than remove files - for example, you could run a script that converts all `<CR><LF>` line endings (DOS/Windows) to `<LF>` line endings (Linux) and run it throughout every commit in the repository. You could write any arbitrary script and give it to `filter-branch` and Git will run that script for *each commit*, generating new commits along the way. It's sort of like `rebase` on steroids. You can even obliterate commits made by specific users (maybe *that guy* needs this treatment!).
 
-There's also one final option that you'll hear about for the use case of removing some big huge file from a repository: BFG Repo-Cleaner. It's a third-party Java application that can very quickly scan through a Git repository and remove references to a given file or files. Since the typical case for deleting a big blob is a binary file, such as an image, audio file or video, BFG Repo-Cleaner can skip regenerating the entire commit history and simply look for commits that reference the binary file and remove the file from their references. 
+There's also one final option that you'll hear about for the use case of removing some big huge file from a repository: [BFG Repo-Cleaner](https://rtyley.github.io/bfg-repo-cleaner/). It's a third-party Java application that can very quickly scan through a Git repository and remove references to a given file or files. Since the typical case for deleting a big blob is a binary file, such as an image, audio file or video, BFG Repo-Cleaner can skip regenerating the entire commit history and simply look for commits that reference the binary file and remove the file from their references. 
 
 > Git handles non-text files a bit more crudely. Rather than doing `diff`s and storing the results, it simply stores "this binary file got added/was changed/was removed". These tags can be easily detected and removed by third party tools like BFG.
 
