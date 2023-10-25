@@ -11,7 +11,7 @@ Let's dive into some advanced Git techniques! Remember for your presentations - 
 ### Thursday:
 * [Git Stashing and Worktrees](#discussion-stashing-and-worktrees)
 * [Bisecting and Blaming](#discussion-bisecting-and-blaming)
-* [Rebasing (and other ways to rewrite history)](#discussion-rebasing-and-history-rewriting)
+* [Rebasing (and other ways to rewrite history)](#discussion-rebasing-and-other-ways-to-rewrite-history)
 
 ## Discussion: Advanced Git Merging
 
@@ -280,3 +280,80 @@ You can alter the output of `git blame` in a couple of ways by using these comma
 * And many others - look at the documentation for `git-blame` for details.
 
 You'll be doing a fun activity in class where you'll find out just *which* one of your scoundrel classmates broke the code!
+
+## Discussion: Rebasing (and other ways to rewrite history)
+
+Rebasing may seem a bit confusing at first. So before we get into rebasing itself, let's recall a fundamental aspect of how Git works.
+
+If you're a UNIX/Linux user, you may have seen the `diff` command before. The `diff` command lets you identify the differences in two text files on a line-by-line basis. It's more than just detecting which lines have changed though, it's also detecting if lines have *moved* or been *deleted*. The output of `diff` is intended to be compact but yet unambiguous enough that it can be used to cause the same changes to occur at a later time. In other words, if you `diff file1.txt file2.txt`, the output is sufficient that you could later convert any copy of `file1.txt` into `file2.txt`, but the size of the output is only a fraction of either file (depending on how much similarity there is).
+
+Git uses `diff` internally to determine what changes have occurred in your repository when you make a commit. Generating the *worktree* for a specific commit is basically a task of taking an initial point in time (typically the initial commit) and *replaying* all of the `diff`s between that initial commit and the commit you are requesting. (It's a bit more complex than that but the internals aren't super important, but if you're curious you can view the source code for Git itself in (naturally) a Git repository at <https://github.com/git/git>.)
+
+A Git commit history is basically a type of linked list. Each commit contains the commit it is based on, the `diff` of the two commits, and the ID of the new commit. It's possible to walk backwards through the list by following the pointer to the previous commit. (Branching complicates this somewhat but you can follow the path all the way back to the initial commit from just about any commit.)
+
+The key here is that each commit simply stores the `diff` between its previous commit. There's nothing special about a specific `diff` output, however. This is where rebasing come in. Put in one sentence, rebasing **regenerates the `diff`s between a given commit and your current state** (`HEAD`). It is one of a couple of ways you can "rewrite history" with Git.
+
+> It's important to interject something here. On your own local machine you can rewrite history with impunity. You could download the Linux source tree and change the very first commit to contain your name instead of Linus Torvalds' name as the author. You could then rebase the entire Linux source tree, regenerating each and every commit along the way, and now you have a repo that makes it look like *you* wrote the Linux kernel. However, you will very quickly find that you're not able to actually *push* that change back upstream to the Linux source code repository on Github.
+>
+> Pushing rebased histories often requires the permission of *force pushing*, which means you are telling the remote Git server to ignore any existing commits that you are overwriting. You are unlikely to have this permission as a simple contributor to a project. You may have permission to force push if you are a core maintainer of a project or, naturally, if it's your own project.
+>
+> To see the effect in action, you can create your own Github repository and clone it on your machine. Then, commit something and push it. Now, make another change and use the command `git commit --amend`. This command rewrites the most recent commit with a new `diff` - basically a one-commit rebase. You could think of it as "undo the last commit and redo it with the current state of the worktree." This will succeed without incident on your own local machine. However, you may find you are unable to actually push this change to your repository. It is common for many source code hosting systems to restrict force pushes by default, requiring you to explicitly allow them. Therefore, some of these techniques are useful for your local machine or as a project maintainer, but may not be useful in all cases.
+>
+> Because of this, it's generally advised not to rebase commits you have already pushed to a remote. In practice this isn't always possible, since you probably are in the habit of `git add -A; git commit -m 'stuff'; git push`. (You might even have an alias or a keyboard shortcut for it...) And at the very least, you probably push your commits to remote at the end of every day or when you're finished working for a while. So it's possible you will need to rebase commits you pushed to a server. The silver lining is that in some systems you *can* force-push to branches *you* created - just not to others' or protected branches. This is something you'll have to try out yourself and possibly work with your administrator to enable.
+
+So, why would you rebase? Imagine this scenario: You made a branch off from the `main` branch to work on a feature. However, it took you a bit longer to get your work done than you originally planned. (Try going to bed on time.) You got your feature working, but since then, a whole bunch of stuff has happened on `main`, most importantly some critical security fixes.
+
+If you were to merge your new feature into `main`, you are likely to get merge conflicts, because the `main` branch has many files that have changed since you checked out your branch. You *could* have frequently merged `main` into your branch, but you forgot. You could merge `main` right now, but that will create a bit of a disjointed history path.
+
+This is one case where `rebase` comes in. In this sense, `rebase` literally means to *base* your branch from a new starting commit. Git will generate entirely new commits starting from the rebase point - this isn't *changing* commits, it's making *new* ones - new commit IDs and all.
+
+Rebasing lets *you* handle the possibility of conflicts rather than making it something that someone higher up the chain has to deal with. When you finally do merge your new feature into `main`, it can be accomplished with a simple fast-forward, or at worst a much simpler merge. This results in a much more linear, clean history path. This has many benefits, among which are much easier use of `git bisect` in the future - complex branching histories can confuse `bisect` and remove some of the benefits and speed with which you bisect.
+
+There's two ways you can execute a `rebase`: standard and interactive:
+
+* Standard rebasing is automatic. Git starts from the branch you are rebasing from and then uses the same differencing algorithm to try to apply your new changes all the way up the chain back to your current state. Just like with merging, you can get merge conflicts from doing this - you resolve them in the same way, but rather than *committing* after resolving the merge, you do `git rebase --continue` to tell Git that you've fixed the conflict and it is OK to proceed. Depending on how many changes there are between the initial commit you branched from and the one you are rebasing to, you may not get any conflicts, or you may get many.
+* Interactive rebasing allows you to have very precise control over the new commits. You can selectively apply or not apply the commits, change the commit messages, squash commits (i.e. combine two or more commits' changes into one commit) and execute arbitrary commands during the rebase process. An interactive rebase opens your text editor and shows you a list of every commit that will be re-generated - this is where you can specify what you want to happen for each commit, and you can also insert lines to, for example, execute commands at certain points. 
+
+To start a Git rebase, you simply run `git rebase commit_id` with `commit_id` being a reference to where you want to rebase from. This can be a commit hash, a branch's current pointer (by branch name) or a tag. So for example, if you branched off of a tag called `v1.0` and now you want to rebase to `v1.1`, you could simply run `git rebase v1.1`.
+
+> To do an interactive rebase, you add the `--interactive` option to the command, e.g. `git rebase --interactive v1.1`.
+
+### Other ways to rewrite history
+
+Oh man, wouldn't it be great if we could erase bad things from history? While in the real world it's probably not a good idea to remove our knowledge of many historical events from the record, in Git there are sometimes good reasons to actually rewrite history. 
+
+> Just as with rebasing, this can be challenging if you're working with remotes. You need force push permission to do history rewrites that you intend to push to a remote. It's *very* common for, at a minimum, a `release` or `production` branch to forbid force pushes. However, in depending on your circumstances, you might have to talk with your sysadmin or whoever runs your Git repo remotes if you need to be able to push (unless you're the one who runs the remote repo, in which case get into the configuration and security settings and have at it.)
+
+#### Amending the most recent commit
+
+We mentioned the `git commit --amend` command. This is the simplest way to modify history - it simply means "whatever the last commit is? Replace that with the current state, recalculating the diff with the previous commit." If you have not yet pushed your latest commit to the remote, you can even do this without worrying about having force-push permissions, since you haven't yet uploaded the commit anyway. A perfect use case? You realize after committing that you forgot to save a file or two in your editor. Rather than making another commit with a message like "I forgot to save", you can simply incorporate those changes into the commit you already made.
+
+You also can change the commit message if you wish - even if you haven't made changes. 
+
+Rebasing is the next level up the chain - it's the way you can change a file going back multiple commits, not just one. As we said, amending a commit is more or less like rebasing to the last commit.
+
+#### Squashing
+
+This is only loosely considered "modifying history", because it's commonly done for cleanliness in the repository. Squashing means to take multiple commits and fold them into a single commit. One place where this might be done is in a merge - you can specify the `--squash` option while merging, which will create *only* the merge commit with *all* of the aggregate changes, rather than bringing forward all of the commits on your branch that are integrated into the target branch.
+
+Sometimes this is done for a production branch to keep its history clean. The production branch then only has single commits for, say, given release versions or major features. The downside to doing this is it breaks the link between the feature branches and the main branch. You can partially resolve this by merging the release branch back into your own branch after you squash merge, which will more or less create an empty merge commit which brings the two histories back in "sync". 
+
+#### That ugly big file
+
+*That guy* did it again. (Seriously, is anyone going to talk to the supervisor?) You're onboarding a new developer and they clone the repository only to see that it's going to need to download multiple *gigabytes* of data. "Why?" asks the newbie. "Isn't this just a simple webapp?" *Yes*, you murmur, *but* that guy *accidentally committed a whole ton of our video assets to the repository months ago, and even though we deleted them they're still in the git history.*
+
+The "nuclear option" for rewriting history is known as `filter-branch`. It's a pretty powerful&ndash;and *dangerous*&ndash;tool that can remove those big files from your repository... or permamently screw it up. If you don't have your repository on a remote, you will definitely want to make a full backup prior to messing with `filter-branch`!
+
+If you know the exact filename, you can blast away the file from your current history tree like this:
+
+    git filter-branch --index-filter 'git rm --cached --ignore-unmatch filename' HEAD
+
+(replace `filename` with the path to the file in the repository to delete)
+
+The `filter-branch` command is complex and we won't spend a whole lot more time on it here, but you should read the documentation on the command if you want to learn more about its options. You can do a lot more than remove files - for example, you could run a script that converts all `<CR><LF>` line endings (DOS/Windows) to `<LF>` line endings (Linux) and run it throughout every commit in the repository. You could write any arbitrary script and give it to `filter-branch` and Git will run that script for *each commit*, generating new commits along the way. It's sort of like `rebase` on steroids. You can even obliterate commits made by specific users (maybe *that guy* needs this treatment!).
+
+There's also one final option that you'll hear about for the use case of removing some big huge file from a repository: BFG Repo-Cleaner. It's a third-party Java application that can very quickly scan through a Git repository and remove references to a given file or files. Since the typical case for deleting a big blob is a binary file, such as an image, audio file or video, BFG Repo-Cleaner can skip regenerating the entire commit history and simply look for commits that reference the binary file and remove the file from their references. 
+
+> Git handles non-text files a bit more crudely. Rather than doing `diff`s and storing the results, it simply stores "this binary file got added/was changed/was removed". These tags can be easily detected and removed by third party tools like BFG.
+
+As in the case of `rebase`, you need force-push access to actually affect these changes on a remote repo. Maybe make *that guy* send the E-mail to upper management and IT requesting force-push access. It was his screw-up after all...
