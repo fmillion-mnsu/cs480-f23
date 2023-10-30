@@ -1,5 +1,12 @@
 # Week 3: APIs, Compatibility and Versioning
 
+## Presentations:
+
+### Tuesday:
+
+* [A Brief Review of APIs](#discussion-a-brief-review-of-api)
+* [Semantic Versioning](#discussion-semantic-versioning)
+
 ## Discussion: A Brief Review of API
 
 An Application Programming Interface (API) is a specification for how one program can interact with another program. *That's it.* There are tons of ways this can be actually implemented, but the goal is always the same - to enable software to communicate with other software.
@@ -134,5 +141,18 @@ The core tenets of semantic versioning are as follows:
 
 For the definitive source of information on semantic version, see the [semantic versioning website](https://semver.org/)! 
 
-
 ## Discussion: Web APIs: REST
+
+Now that we've established APIs and how to version them, let's actually look at a real-life API standard: REST.
+
+REST is an acronym that stands for **Re**presentational **S**tate **T**transfer. In short, REST uses the HTTP protocol's characteristics to specify what you want to do and what you want to do it with. 
+
+### A little HTTP background
+
+HTTP is the protocol that drives the World Wide Web. Every time you access a web site using your web browser, you're using HTTP. (HTTPS is just HTTP with encryption. The underlying protocol is still HTTP.) HTTP is a very old protocol that has gone through a couple of revisions, but its core functionality is the same as it's been for years.
+
+An HTTP transaction begins with a **request** - your web browser sends a command to the server that asks for something. The request consists of up to three parts, two of which are required: the **verb**, the **URI** and the **headers**. 
+
+The **verb** is typically represented in all-caps (but it's not strictly required, and most servers will work just fine if you give the verb in lowercase). The most common verbs - which directly relate to operations in REST - are `GET`, `PUT`, `POST`, and `DELETE`. There's a few other ones that have special use cases, such as `OPTIONS`, but REST APIs can be implemented with just those four verbs.
+
+*To be continued...*
