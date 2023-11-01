@@ -7,6 +7,11 @@
 * [A Brief Review of APIs](#discussion-a-brief-review-of-api)
 * [Semantic Versioning](#discussion-semantic-versioning)
 
+### Thursday:
+
+* [REST APIs](#discussion-web-apis-rest)
+* [API Security](#discussion-web-api-security)
+
 ## Discussion: A Brief Review of API
 
 An Application Programming Interface (API) is a specification for how one program can interact with another program. *That's it.* There are tons of ways this can be actually implemented, but the goal is always the same - to enable software to communicate with other software.
@@ -147,6 +152,8 @@ Now that we've established APIs and how to version them, let's actually look at 
 
 REST is an acronym that stands for **Re**presentational **S**tate **T**transfer. In short, REST uses the HTTP protocol's characteristics to specify what you want to do and what you want to do it with. 
 
+The "state transfer" in REST refers to the fact that a REST API is designed to be *stateless*. This means that the API itself does not need to track user sessions. Each request to a REST API includes all of the information that the server needs to fulfill the request. If any state is required, the state is maintained by the client of the API and is sent along with each request; if the server needs the client to store some state data, it's returned as part of the response. This means that each and every request on the server side is independent of any other request, and each request is atomic - it either finishes or it doesn't. (We'll see an example of why this is important in the next discussion.)
+
 ### A little HTTP background
 
 HTTP is the protocol that drives the World Wide Web. Every time you access a web site using your web browser, you're using HTTP. (HTTPS is just HTTP with encryption. The underlying protocol is still HTTP.) HTTP is a very old protocol that has gone through a couple of revisions, but its core functionality is the same as it's been for years.
@@ -155,4 +162,222 @@ An HTTP transaction begins with a **request** - your web browser sends a command
 
 The **verb** is typically represented in all-caps (but it's not strictly required, and most servers will work just fine if you give the verb in lowercase). The most common verbs - which directly relate to operations in REST - are `GET`, `PUT`, `POST`, and `DELETE`. There's a few other ones that have special use cases, such as `OPTIONS`, but REST APIs can be implemented with just those four verbs.
 
-*To be continued...*
+The **URI** is the path to a resource. You see the URI as the part of the Web URL that follows the domain name. For example, the URI for `https://github.com/fmillion-mnsu` is `/fmillion-mnsu`.
+
+The **headers** are information provided along with the request by your browser. Headers are a simple set of key-value pairs. The browser will always add some default headers, such as a `User-Agent` header which gives information about your browser's version and capabilities, and `Referrer` which tells the browser which page you were on that directed you to access this URL, either by clicking on it or by it being referred to on the page in some fashion. 
+
+A request can also optionally contain some arbitrary data. This can technically be done for any verb, but is most commonly seen with `PUT` and `POST`.
+
+The response from a Web server consists of a **response code**, and optional response message, the **response headers**, and the **body**. There are several response codes, but the most common ones that you have likely seen at some point are:
+
+* `200`: OK. The request succeeded, and the content of the request follows.
+* `206`: Partial Content. The request succeeded and a portion of the response follows. This typically happens if your request included a `Range` header which indicated you only wanted a portion of the content, such as a part of a file.
+* `400`: Bad request. This is defined as the server telling you something was wrong with your request. Maybe the headers included some invalid data, or the URL included an invalid parameter. 
+* `401`: Unauthorized. This occurs if you are not permitted to access the resource, but you may be able to do so if you provide some type of authentication. Convention says that `401` is usually returned for unauthenticated requests, where...
+* `403`: Forbidden ...is returned when you provide authentication but you are not permitted to access the resource with the authentication you provided.
+* `404`: The famous Not Found error. 
+* `500`: Server error. Something went wrong on the server's end - nothing was necessarily wrong with your request, but the server couldn't do anything with it. In other words, it's not your fault. 
+
+And we musn't forget:
+
+* `418`: I'm a teapot, and I can't brew coffee. [Read about error code 418](https://datatracker.ietf.org/doc/html/rfc2324) or [see a page that returns it](https://www.google.com/teapot). :)
+
+After the headers, a blank line is sent, and then the actual response body is sent as-is. 
+
+> **A sample HTTP transaction**
+>
+> The following is a simple HTTP transaction. The data in question is exactly what is sent between the client (your browser) and the web server.
+>
+> To the server:
+>
+>     GET /ip HTTP/1.1
+>     Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8
+>     Accept-Encoding: gzip, deflate, br
+>     Accept-Language: en-US,en;q=0.8
+>     Cache-Control: max-age=0
+>     Upgrade-Insecure-Requests: 1
+>     User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36
+>
+> From the server:
+>
+>     200 OK
+>     Access-Control-Allow-Origin: *
+>     Content-Length: 13
+>     Content-Type: text/plain
+>     Date: Mon, 30 Oct 2023 06:08:05 GMT
+>     Server: istio-envoy
+>     Strict-Transport-Security: max-age=2592000; includeSubDomains
+>
+>     10.100.100.10
+>
+> In this example, a request is made to some server, with the URI being `/ip`. Some headers are included, such as the `User-Agent` header along with some other headers that indicate what the web browser expects the server to send back. The response includes the status code - `200` - meaning the request succeeded. The server provides headers as well, providing information about the server, the response itself, and so on. Finally, the response itself appears - the IP address.
+
+### How REST works
+
+Now that we've established the HTTP protocol, we can clearly explain how the REST API specification works. With REST, you can perform the most common CRUD operations (create, read, update, delete) by directly mapping them to four HTTP verbs:
+
+* `Create` -> `POST`
+* `Read` -> `GET`
+* `Update` -> `PUT`
+* `Delete` -> `DELETE`
+
+And the way that you specify *what* operation you want to perform is via the URI itself. 
+
+As an example, suppose we have programmed the very latest platform for video game distribution. The latest game has just dropped from our favorite publisher, and we want to list it for sale on our store so we can sell it to our millions of eager buyers.
+
+The REST API doesn't specify the *entities* themselves - that's up to us and our application. But it does give us a *framework* for how our HTTP verbs and URIs map to operations on the server. 
+
+So, for this example, we'll assume we have a REST API for our store. Let's list our new game! What might that request look like?...
+
+    POST /api/v1/game
+    Content-Type: application/json
+    User-Agent: BoilingHotGames/1.0
+
+    {"name":"Baldur's Gate 3","description":"The best game of 2023, amIright...","price":69.99}
+
+As we saw, the `POST` target specifies that we want to *create* a new entity. The server replies to us...
+
+    403 Forbidden
+    Content-Type: application/json
+    Server: BoilingHotServer/1.0
+
+    {"error":"You are not logged in."}
+
+Oops. We can't do that because we haven't given the server any authentication. If this were allowed, *anyone* could just start listing games on the store, or even worse, change the prices. Not a good thing, right? 
+
+Let's try again...
+
+    POST /api/v1/game
+    Content-Type: application/json
+    Authorization: Bearer SWYgeW91IGZpbmQgdGhpcyBtZXNzYWdlLCB5b3UgYXJlIGF3ZXNvbWUh
+    User-Agent: BoilingHotGames/1.0
+
+    {"name":"Baldur's Gate 3","description":"The best game of 2023, amIright...","price":69.99}
+
+And the server says...
+
+    201 Created
+    Content-Type: application/json
+    Server: BoilingHotServer/1.0
+
+    {"id",42,"name":"Baldur's Gate 3","description":"The best game of 2023, amIright...","price":69.99,saleCount:0}
+
+This particular API returned us a copy of the object we posted, along with the ID that the object was assigned in the database. This isn't strictly required, but it's a really good idea because that way the program that made the request can discover the ID that the game was given in the database. More importantly, this ID will be used later if you want to get this record back. Speaking of, let's do that...
+
+    GET /api/v1/game/42
+    User-Agent: BoilingHotGames/1.0
+
+Server replies...
+
+    200 OK
+    Content-Type: application/json
+    Server: BoilingHotServer/1.0
+
+    {"id",42,"name":"Baldur's Gate 3","description":"The best game of 2023, amIright...","price":69.99,saleCount:61934}
+
+*Wow!* This game is *really* selling! We only posted it for sale, like, 2 minutes ago!
+
+Since we're a profit-focused game reseller, we definitely want to take advantage of the fact that this game is selling hot. Let's update the price...
+
+    POST /api/v1/game/42
+    Content-Type: application/json
+    Authorization: Bearer SWYgeW91IGZpbmQgdGhpcyBtZXNzYWdlLCB5b3UgYXJlIGF3ZXNvbWUh
+    User-Agent: BoilingHotGames/1.0
+
+    {"price":99.99}
+
+Server says:
+
+    202 Accepted
+    Content-Type: application/json
+    Server: BoilingHotServer/1.0
+
+    {"id",42,"name":"Baldur's Gate 3","description":"The best game of 2023, amIright...","price":99.99,saleCount:102342}
+
+Nice! We'll have to see if that price hike keeps sales alive!
+
+But now that we think about it, we definitely want to make sure some other popular games we might have on our store aren't affecting the sales of this great new game. And hey, those other games have been listed for *far too long!* Let's remove a game...
+
+    DELETE /api/v1/game/32
+    Authorization: Bearer SWYgeW91IGZpbmQgdGhpcyBtZXNzYWdlLCB5b3UgYXJlIGF3ZXNvbWUh
+    User-Agent: BoilingHotGames/1.0
+
+Server says:
+
+    202 Accepted
+    Server: BoilingHotServer/1.0
+
+No response. That's good! That other *inferior* game has now been vanquished to the realm of *not for sale*! More customer money that can go towards our price-inflated game!
+
+### What about things that don't map directly to entities?
+
+REST APIs represent data entities as part of the URL path (the URI) and the action on the data with the HTTP verb. A typical convention is that the entity on its own represents "all" or "no ID" (e.g. `api/v1/game`) while adding an ID to the URI represents "this specific entity by ID" (e.g. `api/v1/game/42`). 
+
+REST is just a convention - much like semantic versioning - and it's not uncommon for APIs to not follow the REST philosophy to the letter. APIs also may need other functions that aren't represented by data entities alone, and it can be argued that these uses are not strictly conforming to the REST philosophy. However, you'll often see such "violations", and they are typically necessary due to the rather limited scope of REST itself.
+
+For example, suppose that, in our game API, we want an endpoint for *purchasing* the game. THere is no HTTP verb  called `PURCHASE`. While you technically can use any verb, and many API engines such as Python's Flask have ways to allow this, it's uncommon because that actually violates the HTTP protocol, and many proxy servers or backend load-balancing servers will not pass these requests through.
+
+A common technique is to use an "entity" for the action itself. For example, you might have an endpoint called `api/v1/game/purchase` that accepts `PUT` requests. (In this example, note that the `purchase` endpoint is located underneath the `game` entity - this allows you to be clear which entity the action refers to. Assuming your IDs are numeric you can safely do this, because your API engine should be able to separate "all numbers" (refers to an entity) and "some string" (refers to this endpoint).)
+
+> Of course, `purchase` may end up being its own entity in a database, so you might also just see `api/v1/purchase`. 
+
+Two more examples are actions that may not directly impact or refer to any data entity in the database, and actions that have special meaning and/or validation steps where you don't want a direct update of a data entity but want to affect multiple entities. There's a few ways you might implement such actions. For example:
+
+* `api/v1/game/42/download`
+* `api/v1/user/resetpassword`
+* `api/v1/game?sort=highest-profit`
+* `api/v1/game/search?q=baldurs+gate`
+
+And so on...
+
+## Discussion: Web API Security
+
+The REST API discussion talked a bit about how to secure a Web API from unauthorized access. This final discussion on APIs, specifically web APIs, will focus on the most common ways we handle authenticating to APIs.
+
+For non-Web APIs, you might see something like "provide a license key to the class initializer" or "the class will look for a configuration file in a handful of documented places which should contain credentials." Web APIs also may do this for *backend* configurations (such as credentials for accessing a database server), but there's a few strategies that are very typical for how a *client* (such as a browser) authenticates to the API. 
+
+Recall that REST is a *stateless API*. Therefore, there's no concept of "logging in" to a REST API. Instead, *each* request to the API must include credentials that the API can use to validate and authorize the request. Just because you sent a fully authenticated request one second ago does not mean your next request will succeed, unless you also include that authentication again.
+
+Authentication is one piece of state that the client tracks when interacting with a REST API. We saw in the last discussion that the `Authorization` header can be used as a method for transferring these credentials. We also learned that a `Bearer` authentication token is considered sufficient authorization on its own, so a bearer token must be cryptographically secure - it must not be possible for an end user to *forge* a bearer token. 
+
+> **Firesheep**
+>
+> Back in the 2000s, a Firefox extension was released that allowed you to perform "session hijacking". The extension, known as *Firesheep*, allowed you to *sniff* HTTP traffic on a local network and extract bearer tokens. The extension could then inject those tokens into your browser. The result was that you could hijack and take over someone else's Facebook session, Twitter login, and so on, without needing to know their password. It was only temporary since bearer tokens are generally designed to expire quickly, but even a few minutes of authenticated access to another person's Facebook account can result in some awful things...! (APIs also typically use a "refresh token" scheme where you can request a new token using the current token right before it expires. Therefore, this rapid expiration didn't always make things any more secure!)
+>
+> This was possible because, as we said, bearer tokens serve as authentication on their own. If you can get the bearer token from someone else's browser and inject it into your browser, for all intents and purposes, you *are* that person to that website. 
+>
+> This no longer works today, because Firesheep, along with many other cybersecurity incidents from years ago, pushed the industry to move to HTTPS. By securing and encrypting HTTP connections, it's no longer possible to steal and hijack bearer tokens by just listening to traffic on a network. However *we still use bearer tokens in the same way today*. While you can't just passively sniff tokens, and HTTPS even protects active man-in-the-middle hijacks, it's still theoretically possible to extract tokens from one browser and inject them into another on a different machine. Keep this in mind if you're a fan of using "remember my login" on websites, and other people use your computer and would have a way to access your files...!!
+
+So what's actually in a bearer token? It looks like a jumbled mess of letters. What's actually in there is a blob of encrypted and signed data that the server generates. The idea is that the client doesn't need to, and *shouldn't*, be able to actually interpret the *contents* of the token, nor should the client be able to alter the contents of the token. The client only needs to know that the token is the authentication key, and should include the token any time it makes a request to the API. The API decides what goes into the token, and only the API can read the data back from the token (because it encrypts the token with its own private key). **This is one way that the API offers state to the client, and that the client** ***transfers state*** **back to the API!**
+
+At a minimum, a token will typically contain some sort of user identification and an expiration time. It might be as simple as "The user `fmillion` is logged in, and this token is valid until midnight tonight." Since the token itself is considered to be secure, and thanks to encryption the client can't alter the token, the server considers this token to be a valid credential for the user `fmillion`.
+
+> **Making a JWT**
+>
+> You can actually easily generate a bearer token in Python. A very common scheme is known as JSON Web Tokens. These tokens let you encode a set of key-value pairs encrypted and signed with a given passphrase. That passphrase is known only to the web server, and can in fact change dynamically and regularly on the web server's end for increased security.
+>
+> You can use `pip` to install the PyJWT library which lets you create and validate JSON Web Tokens.
+>
+> Once you have PyJWT installed, try running this code:
+>
+>     import jwt
+>     key = "TheMostSecurePasswordEver!"
+>     encoded = jwt.encode({"user": "fmillion"}, key, algorithm="HS256")
+>     print(encoded)
+>
+> You'll get back a jumble of characters that looks something like this:
+>
+>     eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjoiZm1pbGxpb24ifQ.ZLy0B2jmj5Dw9Bs-gUjRHJ3xIcvjhuq40zwPZIQdRkM
+>
+> That string is your bearer token! The API can decode it back to the key-value pairs provided as long as it knows the same secret key:
+>
+>     jwt.decode(encoded,key,algorithms="HS256") 
+>     (returns "{'user': 'fmillion'}")
+>
+> In JWT lingo, each key-value pair is known as a *claim*. There are a small number of standardized claims that JWT implementations consider special cases. One such claim is `exp`, which represents the token's expiration time. The Python JWT library supports this directly:
+>
+>     jwt.encode({"exp": datetime.datetime.now(tz=timezone.utc) + datetime.datetime.timedelta(seconds=30)}, key)
+>
+> This creates a JWT that expires 30 seconds from now. When you use the `decode` function, and if an `exp` claim is present, PyJWT will check to see if the token is expired, and if so, an exception gets thrown.
+
+*To be continued - almost done*
