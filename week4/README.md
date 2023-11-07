@@ -1,5 +1,10 @@
 # Week 4: DevOps
 
+## **Assignments:**
+
+* [Tuesday: In-class GitHub Actions Getting Started assignment](ASSIGN1.md) - **Individual project, one submission per student!**
+
+
 ## Presentations:
 
 ### Tuesday
@@ -127,3 +132,89 @@ Why is this useful? This disconnects the interdependence between the source code
 Even more importantly, it allows CI/CD to fall under the same review and approval process as source code itself. Nobody is going to sneak in a rogue script or CI action without a reviewer seeing it, and even if it passes review, every developer can view the change! This reduces the chance that a rogue CI/CD administrator changes the pipelines without anyone knowing!
 
 Additionally, modern CI/CD systems differentiate CI and CD to a lesser degree; the "ultimate" convergence is where the system does not differentiate the two at all, and a deployment task is simply another workflow. The one component that stays out of the code (and *should!*) is the secrets themselves. However, the actual deployment steps can be listed in the source tree, with any sensitive information like credentials, server addresses and so on masked out. The CI/CD system will replace the placeholders with the actual values when the workflow is run.
+
+## Discussion: GitHub Actions
+
+There are many CI/CD systems out there. To name a few:
+
+* **[GitHub Actions](https://github.com/features/actions)** - the star of our show!
+* [GitLab CI/CD](https://docs.gitlab.com/ee/ci/)
+* [Gitea Actions](https://docs.gitea.com/usage/actions/overview) (mostly compatible with GitHub Actions)
+* [Azure DevOps](https://azure.microsoft.com/en-us/products/devops/pipelines) (Azure Pipelines)
+* [Travis CI](https://travis-ci.com)
+* [CircleCI](https://circleci.com)
+* [Jenkins CI](https://jenkins.io)
+* And [many more...](https://www.lambdatest.com/blog/best-ci-cd-tools/)
+
+So with all these choices, why are we using GitHub Actions and not some other tool? A few reasons:
+
+* GitHub Actions is easy to configure, because it's built into GitHub. You don't need to connect an outside service to your repository and share Git credentials with some external program in order to get CI/CD workflows working.
+* The configuration itself is stored in the [YAML](https://yaml.org/) language, which is a neat way to store structured data objects in easily-editable plain text. It's similar to XML but is much easier to work with directly in a text editor like Visual Studio Code.
+* It's widely used. It's not the most *popular* tool (that title goes to Jenkins), but GitHub as a platform is used by [over 80%](https://www.6sense.com/tech/source-code-management/github-market-share) of organizations and users for source code management. The skills you learn with GitHub Actions will easily translate to other CI/CD systems.
+
+So, how do we use GitHub Actions?
+
+### YAML - the configuration file format
+
+If you haven't seen YAML files before, don't worry - they're very straightforward and easy to read. YAML files consist of typical data structures - strings, numbers, lists, dictionaries (key-value pairs) and so on, expressed in plain text. It serves a purpose similar to JSON but is arguably a "better" format for a few reasons, not the least of which is that it allows comments!
+
+Some believe YAML stands for "Yet Another Markup Language", but [the official YAML website](https://yaml.org) says it stands for "YAML Ain't Markup Language" - another use of the "recursive acronym" trend that's popular among open source developers. (GNU = GNU is Not Unix, LAME = LAME Ain't an MP3 Encoder...)
+
+While a YAML file technically can consist of a simple *scalar* value (such as a string or an integer), this isn't very useful. YAML becomes useful when you use it to store common data structures like lists and dictionaries.
+
+Here is a sample of a YAML file:
+
+    name: GitHub Actions Demo
+    run-name: ${{ github.actor }} is testing out GitHub Actions
+    on: [push]
+    jobs:
+    Test-GitHub-Actions:
+        runs-on: ubuntu-latest
+        steps:
+        - run: echo "Hello GitHub Actions running on a ${{ runner.os }} server!"
+
+Firstly, much like Python, *indentation is significant in YAML.* The indentation level controls what contains what. 
+
+If you take a look at the lines that are all the way justified left, you'll notice all of them start with a string followed by a colon. This is because this YAML file represents a *dictionary* (a key-value store)! Each line that is not indented contains both a key and a value separated by a colon. 
+
+Take a look at the `on:` value. It contains square brackets - and they work very much like they do in Python. The square brackets define a list. This list contains a single item, `push`. 
+
+Finally, the last item, labeled `Test-GitHub-Actions`, contains a complex substructure. At 4 spaces in, we have another key-value set - this means that the `Test-GitHub-Actions` key actually contains as its value another key-value store, or in other words, another dictionary.
+
+Finally, the `steps` value within this subdirectory contains a list. The list contains one item, which contains... a key-value store.
+
+Confused yet? This file as presented may seem a bit daunting because there's a *lot* of nesting going on. It might help if we represent exactly this same file as a Python dictionary:
+
+    yaml_contents = {
+        "name": "GitHub Actions Demo",
+        "run-name": "${{ github.actor }} is testing out GitHub Actions",
+        "on": [ "push", ],
+        "Test-Github-Actions": {
+            "runs-on": "ubuntu-latest",
+            "steps": [
+                {
+                    "run": "echo \"Hello GitHub Actions running on a ${{ runner.os }} server!\""
+                }
+            ]
+        }
+    }
+
+Now you have a better picture of what's happening. What makes this a bit confusing is that the indentation level is not "consistent" - i.e. it's not always 4 spaces. The very last line, with a list item, is technically starting a new indent level, 2 spaces after the 4-space indent level. For example, suppose we needed to add more values to that sub-sub-dictionary:
+
+    Test-GitHub-Actions:
+        runs-on: ubuntu-latest
+        steps:
+        - run: echo "Hello GitHub Actions running on a ${{ runner.os }} server!"
+          environment: 
+            - This is a sublist
+            - This list is part of the "environment" key under "steps" under "Test-GitHub-Actions".
+        - run: echo "This is another step."
+        - run: echo "And this is yet another step."
+
+One key point of YAML is that, much like Python lists, order is significant. The list of steps (which is a list of dictionaries) is processed in forward order by GitHub Actions. You don't have to specify step numbers - if you need to add a step in the middle of the steps, you simply put that step in the correct location. This makes editing YAML files (and in turn GitHub workflows) pretty easy.
+
+Don't worry if you don't fully grasp YAML yet. You'll get plenty of opportunities to practice - not just with GitHub Actions, but with Docker when we get to the Containerization unit!
+
+### The simplest GitHub action
+
+Guess what - you've already seen the simplest GitHub Actions workflow! That sample YAML file above is a functional GitHub Actions workflow. But how do you make it run?
