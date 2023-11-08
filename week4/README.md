@@ -4,7 +4,6 @@
 
 * [Tuesday: In-class GitHub Actions Getting Started assignment](ASSIGN1.md) - **Individual project, one submission per student!**
 
-
 ## Presentations:
 
 ### Tuesday
@@ -15,8 +14,7 @@
 ### Thursday
 
 * [GitHub Actions - Getting Started](#discussion-github-actions)
-* [GitHub Actions - Runners](#discussion-github-actions-runners)
-* [GitHub Actions - Secrets](#discussion-github-actions-secrets)
+* [GitHub Actions - Actions and Runners](#discussion-github-actions-actions-and-runners)
 
 ## Discussion: What is DevOps?
 
@@ -218,3 +216,50 @@ Don't worry if you don't fully grasp YAML yet. You'll get plenty of opportunitie
 ### The simplest GitHub action
 
 Guess what - you've already seen the simplest GitHub Actions workflow! That sample YAML file above is a functional GitHub Actions workflow. But how do you make it run?
+
+The in-class assignment from Tuesday had you follow the Microsoft [GitHub Actions Quickstart](https://docs.github.com/en/actions/quickstart). One of the lines in the sample file specifies when to run the workflow: `on: [push]`. 
+
+As configured, this means the workflow will run on *any* branch on which the file exists as written! So if you make a branch and commit that branch to GitHub, the pipeline will run again for that branch. 
+
+This is fine, but what happens if you *don't* want the workflow running every single time someone pushes some new code? (Which is almost certainly the case!) You can adapt the `on` value to many different scenarios and very tightly control when the workflow automatically runs!
+
+## Discussion: GitHub Actions - Actions and Runners
+
+GitHub Actions can seem a bit magical from the outside. Just stick a configuration file in your repository and set it up the right way, and magically, things *happen*. Code gets built, tested and deployed all on its own. Naturally, there's a lot more code behind the scenes to help this run. In this section we'll talk about how GitHub Actions actually works.
+
+### Actions
+
+What does GitHub Actions *actually* do when you run your workflows? Where does the code come from that gets run? Believe it or not, the code itself is hosted...on GitHub!
+
+Check out this step in the GitHub Actions demo:
+
+        - name: Check out repository code
+          uses: actions/checkout@v4
+
+That `uses` value indicates where to find the code that should be run for this step of the workflow. Want to see the code? Try going to [[https://github.com/actions/checkout]]!
+
+> The `@v4` means to checkout the Git item named `v4`. Just as with the `git checkout` command, this can be any Git identifier, including a branch name, a tag, or a commit ID. It's extremely common (and best practice, if you get into developing your own actions) to use tags to "lock in" certain versions of the action. This way, workflows can be reasonably guaranteed that their behavior won't suddenly change because you released a new version of an action.
+
+Officially, GitHub Actions are written in TypeScript. This is not *strictly* necessary, but it's the standardized language for Actions since all of the OS system images used for running GitHub Actions workflows come with NodeJS installed. If you wanted to, say, write an action using Python or C#, you could absolutely do that, but you'd have to first run a different action (written in TypeScript) that installs the necessary runtime environment for your action. You can include this in your action's configuration - if you're curious, [here is an example](https://shipyard.build/blog/your-first-python-github-action/) of how to do it.
+
+This course won't focus on actually *developing* GitHub actions, but now you know how GitHub Actions actually works. Every step, other than running a shell command, exists as a Git repository containing the code for that action. 
+
+There's a few neat things here. The Actions are all open source, by design and by requirement of the architecture. And anyone can write their own action; just publish a public GitHub repository. Anyone who wants to use the action need only specify it. For example, if your GitHub username is `student` and you just wrote a cool GitHub action and pushed it into a repository called `do_things`, anyone who wants to can use your action by simply using `uses: student/do_things@v1` (or whatever version tag you've selected). This makes GitHub Actions infinitely extensible by anyone for anyone!
+
+How can you discover what other actions are available? There's a small collection of them available under the GitHub user `actions` (which is where `actions` comes from in `actions/checkout@v4`). [This page](https://github.com/orgs/actions/repositories) lists all of the actions available (along with some supporting repositories which are not actually usable actions). For example, `setup-python` lets you install Python (optionally specifying an explicit version) to install into the build environment. There's also `upload-artifact` which lets you upload the *artifacts* your code has generated. The artifacts are then accessible in the GitHub Actions view, and can also be downloaded by later workflows using `download-artifact` (for example, to actually deploy a compiled program).
+
+Of course, there are more actions than those available under the `actions` user ... *many, many* more. The [GitHub Actions Marketplace](https://github.com/marketplace?type=actions) is a public index that lists all publicly listed GitHub actions. There are actions that are designed by companies to allow you to directly interact with their platforms or services. For example, there's an action to upload a compiled Android application to the Google Play Store. There are even actions that will build iOS applications, provided you run the action on a Mac.
+
+### Runners
+
+Speaking of running the actions, where and how does that happen?
+
+Actions are run using a program called a **runner**. A runner is a piece of software you can install on any Windows, Mac or Linux server. Runners connect to Github and use a *pull* strategy to poll GitHub to see if any actions are waiting to be run. If so, the runner picks up any actions it's able to run (more on that in a moment) and schedules them to run. The runner is the thing that actually clones the action repositories, runs the code, uploads the artifacts, returns the results to GitHub, and so on.
+
+Linux-based runners typically use the *Docker* containerization system. Docker is a topic we'll be covering in a couple of weeks, but for the purposes of this discussion, you just need to know that Docker is a system that lets you start up predictable, reproducible, preconfigured environments. Thus, a GitHub Actions runner can start each job with a known fresh environment. Unfortunately this doesn't work on Mac at all (because on Mac, Docker is just a Linux virtual machine) and on Windows certain special requirements must be met to use Docker for Windows to run Windows programs. Using Docker is not a *requirement* of using a GitHub runner, but it is a good idea if it's possible for you to do so. (For example, imagine if a job that ran before you installed Python 3.10, and you need Python 3.9. The `setup-python` action will likely be able to figure this situation out, but you can imagine it's not possible for code to account for *all possible* scenarios...)
+
+GitHub offers free use of their runners for a limited time per month. If you're working on publicly-accessible repositories, you can use GitHub Actions for free. But if you are working on private repositories, GitHub lets you use Linux-based runners for 2,000 minutes of actions per month (rounded up to the next minute). Due to the licensing costs of Windows and the hardware requirements of Mac, you only get 1,000 minutes worth of Windows and 200 minutes worth of Mac execution time per month. This might sound like a lot of time, but imagine your program takes 10 minutes to build - you could easily burn through 20 builds in one month on a Mac instance... (You also get a limited amount of artifact storage for free - 500MB for free accounts. )
+
+It's also possible to run your own runner easily. If you need lots of Mac build time but you also own a Mac, you can install a GitHub runner on it and it will pick up and run your GitHub workflows for you. (The same of course applies to Windows and Linux.) GitHub allows unlimited use of runners you host yourself regardless of project type.
+
+During class we'll set up a runner (together, not an assignment) for our organization and then you'll change your GitHub action to use our own custom runner!
