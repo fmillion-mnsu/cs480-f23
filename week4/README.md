@@ -6,7 +6,7 @@
 
 ## **Quiz:**
 
-There is a [**take-home quiz**](QUIZ1.md) this week! 
+There is a [**take-home quiz**](QUIZ1.md) this week! (Due Tuesday November 14th at 8 AM)
 
 ## Presentations:
 

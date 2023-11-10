@@ -1,6 +1,8 @@
 # Quiz 1 - CS 480, Fall 2023, Block 2
 
-This project will serve as your first of two *quizzes* for the project. This is a take-home quiz that you may do on your own time. **You are to work INDIVIDUALLY on the quiz - you may NOT work with others or in your groups!** You may NOT ask others in class for help on the quiz.
+**The quiz repository is [here](https://github.com/mnsu-cs480-f23/cs480-quiz1).** (https://github.com/mnsu-cs480-f23/cs480-quiz1)
+
+This project will serve as your first of two *quizzes* for the project. This is a take-home quiz that you may do on your own time. **You are to work INDIVIDUALLY on the quiz - you may NOT work with others or in your groups!** You may **NOT** ask others in class for help on the quiz. However, you **MAY** use Internet resources as reference as long as those Internet resources do not include "asking other members of the class via the Internet" or "copying and pasting stuff as-is"!
 
 This quiz is due **before class** (at 8 AM) on Tuesday November 14th. Points will be deducted for late quiz completion.
 
