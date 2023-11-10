@@ -4,6 +4,10 @@
 
 * [Tuesday: In-class GitHub Actions Getting Started assignment](ASSIGN1.md) - **Individual project, one submission per student!**
 
+## **Quiz:**
+
+There is a [**take-home quiz**](QUIZ1.md) this week! 
+
 ## Presentations:
 
 ### Tuesday
