@@ -173,7 +173,7 @@ If you have already forked the repository, you can use these commands in your re
     git fetch upstream
     git switch -c main-hotfix-1 upstream/main-hotfix-1
     git branch -u origin/main-hotfix-1
-    git switch -c main-hotfix-1 upstream/bug
+    git switch -c bug upstream/bug
     git branch -u origin/bug
     git checkout main
     git remote rm upstream
