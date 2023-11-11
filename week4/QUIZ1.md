@@ -14,6 +14,8 @@ This quiz is due **before class** (at 8 AM) on Tuesday November 14th. Points wil
 
     > Make sure that you **uncheck** the following checkbox, so that you will get a copy of all branches on the original repository in your fork. If you do not uncheck this box, you will not have the `main-hotfix-1` and `bug` branches that you will need for later steps in this quiz!
     >
+    > ![Image showing checkbox labeled "Copy the main branch only" which is unchecked](mainbranch.png)
+    >
     > If you already forked the repository and don't have the extra branches, see the [section on how to fix this](#fixing-a-fork-made-with-only-the-main-branch) later in the quiz.
 
 2. Clone your fork to your machine, setup the appropriate Python virtual environment and install the requirements.
