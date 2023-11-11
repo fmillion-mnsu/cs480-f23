@@ -11,6 +11,11 @@ This quiz is due **before class** (at 8 AM) on Tuesday November 14th. Points wil
 ## Steps
 
 1. **Fork** the repository `cs480-quiz1` into the *organization* (**not** to your personal GitHub) and name it `cs480-quiz1-firstname-lastname` (replacing `firstname` and `lastname` with your name). This repository contains a skeleton REST API very similar to Phase 1 of our API exercise. Place the form within the CS480 course organization and make sure it is marked private.
+
+    > Make sure that you **uncheck** the following checkbox, so that you will get a copy of all branches on the original repository in your fork. If you do not uncheck this box, you will not have the `main-hotfix-1` and `bug` branches that you will need for later steps in this quiz!
+    >
+    > If you already forked the repository and don't have the extra branches, see the [section on how to fix this](#fixing-a-fork-made-with-only-the-main-branch) later in the quiz.
+
 2. Clone your fork to your machine, setup the appropriate Python virtual environment and install the requirements.
 
     > **Reminder:**
@@ -83,7 +88,7 @@ This quiz is due **before class** (at 8 AM) on Tuesday November 14th. Points wil
             return Response(status_code=status.HTTP_202_ACCEPTED)
 
 8. Test the API again to make sure the new method works. Add a screenshot called `step8` showing your API working and add it to your branch.
-9. Commit and push your change.
+9.  Commit and push your change.
 10. Now, *check out* your `quiz1` branch.
 11. Create **another** new branch titled `quiz1-feature2`.
 12. Add the following method to the API:
@@ -157,3 +162,26 @@ If you are confused or unsure of any requirements please feel free to E-mail me 
 This quiz will be worth 7.5% of your total grade.
 
 Good luck!
+
+## Fixing a fork made with only the `main` branch
+
+If you have already forked the repository, you can use these commands in your repository directory to resolve it without having to start over or re-fork:
+
+    git remote add upstream git@github.com:mnsu-cs480-f23/cs480-quiz1.git
+    git fetch upstream
+    git switch -c main-hotfix-1 upstream/main-hotfix-1
+    git branch -u origin/main-hotfix-1
+    git switch -c main-hotfix-1 upstream/bug
+    git branch -u origin/bug
+    git checkout main
+    git remote rm upstream
+
+1.	The first command adds a second “remote” to your repository which points to the original repository and names it “upstream”.
+2.	The fetch command tells Git to download the contents of the new remote we just added.
+3.	The next two commands create a new local branch called “main-hotfix-1” and set that branch to “track” the contents of the main-hotfix-1 branch on the “upstream” remote – that is, it will pull in the contents of the branch on the original repository that you forked from. It then sets the new branch you just checked out to point to your own instance of the repository (“origin” is the default name of the remote when you clone a repository).
+4.	The next two commands do the same for the “bug” branch which you will need later.
+5.	Finally you switch back to your main branch, and delete the “upstream” remote so you won’t accidentally try to push to it later.
+
+If you experience any issues pushing, you can use this command to force everything to go to your own copy:
+
+    git push -u origin –all
