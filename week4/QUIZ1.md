@@ -186,4 +186,4 @@ If you have already forked the repository, you can use these commands in your re
 
 If you experience any issues pushing, you can use this command to force everything to go to your own copy:
 
-    git push -u origin –all
+    git push -u origin –-all
