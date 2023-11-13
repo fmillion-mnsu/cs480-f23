@@ -51,7 +51,7 @@ This quiz is due **before class** (at 8 AM) on Tuesday November 14th. Points wil
                     400: {"model":str,"description":"The book ID you provided already exists in the database - try a POST request"}
                 },
                 status_code=status.HTTP_201_CREATED)
-        def put_book(id: str = Path(description="ID of new book"), data: Book):
+        def put_book(data: Book, id: str = Path(description="ID of new book")):
             """Adds a new book to the database."""
 
             # If book already exists, bad request
@@ -79,7 +79,7 @@ This quiz is due **before class** (at 8 AM) on Tuesday November 14th. Points wil
                     400: {"description":"The book ID you provided already exists in the database - try a POST request","content":None}
                 },
                 status_code=status.HTTP_202_ACCEPTED)
-        def update_book(id: str = Path(description="ID of book to update"), data: Book):
+        def update_book(data: Book, id: str = Path(description="ID of book to update")):
             """Updates an existing book in the database."""
 
             # If book already exists, bad request
