@@ -75,16 +75,16 @@ This quiz is due **before class** (at 8 AM) on Tuesday November 14th. Points wil
         @app.post("PUT_YOUR_ENDPOINT_PATH_HERE!",
                 response_model=None,
                 responses={
-                    201: {"description":"The book was successfully added to the database","content":None},
-                    400: {"description":"The book ID you provided already exists in the database - try a POST request","content":None}
+                    201: {"description":"The book was successfully updated in the database","content":None},
+                    404: {"description":"The book ID you provided does not exist in the database - try a POST request","content":None}
                 },
                 status_code=status.HTTP_202_ACCEPTED)
         def update_book(data: Book, id: str = Path(description="ID of book to update")):
             """Updates an existing book in the database."""
 
             # If book already exists, bad request
-            if id in bookList.keys():
-                raise HTTPException(status_code=400)
+            if id not in bookList.keys():
+                raise HTTPException(status_code=404)
 
             bookList[id] = data
             return Response(status_code=status.HTTP_202_ACCEPTED)
