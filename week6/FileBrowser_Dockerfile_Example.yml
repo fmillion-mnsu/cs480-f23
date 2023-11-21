@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  files:
+    image: filebrowser/filebrowser
+    volumes:
+      - ./data:/srv
+      - ./filebrowser.db:/database.db
+    ports:
+      - 8000:80
