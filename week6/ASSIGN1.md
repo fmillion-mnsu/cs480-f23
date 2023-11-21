@@ -20,7 +20,7 @@ Work together as a group on one machine on which Docker is working to do the fol
 4. If you do not get any errors, your database server is up and running! 
 5. Now you'll create a user in the database for your WordPress server. Run this command to get a MySQL prompt within your container:
 
-    `docker compose exec database mysql -u root -p`
+    `docker compose exec database mariadb -u root -p`
 
     Enter the password you provided as the value of `MYSQL_ROOT_PASSWORD` when prompted.
 
