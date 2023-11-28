@@ -11,9 +11,9 @@ Use the following links to access the course materials:
 * [Week 2: Source Control II](week2/README.md)
 * [Week 3: APIs, Compatibility and Versioning](week3/README.md)
 * [Week 4: DevOps](week4/README.md)
-* [Week 5: DevOps II](week5/README.md)
-* [Week 6: Containerization](week6/README.md)
-* [Week 7: Containerization, Extra Topics, Wrap-Up!](week7/README.md)
+* [Week 5: DevOps II and Containerizaion I](week5/README.md)
+* [Week 6: Containerization II](week6/README.md)
+* [Week 7: Containerization III, DevOps III, Extra Topics, Wrap-Up!](week7/README.md)
 
 ## Resources:
 

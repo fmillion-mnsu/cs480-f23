@@ -9,8 +9,8 @@
 
 ### Thursday
 
-* [GitHub Actions - Managing Secrets](#discussion-github-actions---managing-secrets)
 * [Containerization - Docker, Kubernetes, and Cloud Hosting](#discussion-docker-kubernetes-and-cloud-hosting)
+* [Containerization - Dockerfiles](#discussion-dockerfiles)
 
 ## Discussion: GitHub Actions - Building A Workflow - Part 1
 
@@ -152,7 +152,7 @@ So now we know what a container is. But how do we run one?
 
 Before we get to that, let's first talk about the mainstream containerization platforms that are prominent today. Luckily, most modern containerization systems are cast from the same basic mold, and differ only in their feature set and scalability. 
 
-### Software 
+### Software
 
 Let's start with **Docker**. If you've heard of one containerization platform, it's almost certainly going to be Docker. Docker is arguably the most popular containerization system in use today. However, this may simply be because it's the one that is the easiest to get started with and the one that's easiest to run on your own computer. You can install Docker Desktop on your computer and start running Docker containers with only a command or two. 
 
@@ -174,14 +174,12 @@ To support this, many platforms today offer the ability to host containers on se
 
 We'll do a small exercise in class today where you'll run a simple Wiki container on a cloud service for free.
 
-## Discussion: GitHub Actions - Variables
+### Docker
 
-Maybe you've written a workflow that does the same exact thing every single time and never changes. This is easy to setup and deploy. But you'll quickly start discovering scenarios where you want to alter some behavior of the workflow each time it's run. It might be something as simple as including a date stamp or as complex as a fully customized build for various clients or instances.
+The star of the show is, of course, **Docker**. Docker 
 
-(The rest of this will be posted shortly...)
+## Discussion: Dockerfiles
 
-## Discussion: GitHub Actions - Managing Secrets
+By now you've seen how we can run a container with Docker. The next step in your containerization adventure is how you can make your *own* containers!
 
-GitHub Secrets are a strategy for including sensitive information in a workflow. This removes the need to, for example, store sensitive credentials on certain runners. GitHub manages the secrets, stores them under industry-standard encryption and ensures that only those entities you specify can access the secrets. Secrets are typically used for deployment tasks (such as deploying your updated website to production), but might also be used for tasks such as logging into services to obtain data, license keys for specialized processing pipeline tools and more.
-
-[GitHub's reference page on Secrets](https://docs.github.com/en/actions/security-guides/using-secrets-in-github-actions) is a great place to start learning about and understanding Secrets. We'll cover the basics here, but definitely refer to the GitHub page as well for more details!
+The 
