@@ -123,7 +123,7 @@ Another way is to add the variable and its value to the GitHub environment file 
 
 # Submission
 
-Your only submission is your two `.yml` files for your GitHub actions. No screenshots or repository links required this time!
+No D2L submission - I'll see your repository in the GitHub organization!
 
 > *I can see jobs that have run on the runner, even from your own repositories - so I'll be able to tell if you don't actually run your own jobs on your own repositories!!!*
 >
