@@ -108,14 +108,18 @@ Another way is to add the variable and its value to the GitHub environment file 
 
     Change `SOME_VARIABLE` to a variable name of your choice. Variable names should be capitalized, must not contain spaces, and cannot start with a number.
 
-2. **Copy** your GitHub action to a new file - for example, `docker-step2.yml` - and do two things: change the job name, and add the environment variable you added above. The value does not matter, since that `env` command will print out *all* variables. You can use the `env:` section - no need to use the scripting method for setting a variable.
+1. Change your Docker Build command as follows: `docker build -t <YOURNAME_LOWERCASE_NO_SPACES>_week7 --build-arg "SOME_VARIABLE=$SOME_VARIABLE" .`
+
+    Remember to change `SOME_VARIABLE` to your variable name.
+ 
+1. **Copy** your GitHub action to a new file - for example, `docker-step2.yml` - and do two things: change the job name, and add the environment variable you added above. The value does not matter, since that `env` command will print out *all* variables. You can use the `env:` section - no need to use the scripting method for setting a variable.
 
     You can simply open your action, do a Save As and give it a new filename in the same directory, and then make the edits. 
 
     > Hint: You *would* use the scripting method if you wanted to set a variable at runtime during your job that you could not ascertain ahead of time. 
 
-3. Commit your new action and wait for your GitHub action to run.
-4. Go to your Actions view and see your action running!
+1. Commit your new action and wait for your GitHub action to run.
+1. Go to your Actions view and see your action running!
 
 # Submission
 
