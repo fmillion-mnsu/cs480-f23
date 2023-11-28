@@ -5,6 +5,9 @@ We're going to start to bring all the pieces together! Today you will do an **in
 ## Steps
 
 1. *Create a new repository* in the CS480 organization called `week7-<yourname>`.
+
+    > **Important**: Your repository must be **private** or else the runner will not work!
+
 2. Clone the empty repository to your computer.
 3. Create a Dockerfile that will print out a message:
 
@@ -76,7 +79,7 @@ We're going to start to bring all the pieces together! Today you will do an **in
 
     Also notice that these commands are very much like the ones we ran while we were playing with Docker. All we're doing here is having the GitHub runner run the commands for us.
 
-9. Double-check your action file. Remember that **indentation matters!**
+9.  Double-check your action file. Remember that **indentation matters!**
 10. Save your action file as something like `docker.yml` in the `.github/workflows` directory.
 11. Commit and push the change.
 12. Now, go visit your repository on GitHub and visit the Actions tab. If all went well you should see your Action running (or maybe it's already finished) and be able to view the results!
@@ -99,10 +102,13 @@ Another way is to add the variable and its value to the GitHub environment file 
 
 1. Edit your Dockerfile to print out all environment variables in your message. Add these lines before the `CMD` line:
 
+    ARG SOME_VARIABLE
     RUN echo "Environment variables: " >> /message.txt
     RUN env >> /message.txt
 
-2. **Copy** your GitHub action to a new file - for example, `docker-step2.yml` - and do two things: change the job name, and add at least one environment variable of your choice. The name of the variable and its value do not matter, since that `env` command will print out *all* variables. You can use the `env:` section - no need to use the scripting method for setting a variable.
+    Change `SOME_VARIABLE` to a variable name of your choice. Variable names should be capitalized, must not contain spaces, and cannot start with a number.
+
+2. **Copy** your GitHub action to a new file - for example, `docker-step2.yml` - and do two things: change the job name, and add the environment variable you added above. The value does not matter, since that `env` command will print out *all* variables. You can use the `env:` section - no need to use the scripting method for setting a variable.
 
     You can simply open your action, do a Save As and give it a new filename in the same directory, and then make the edits. 
 
