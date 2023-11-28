@@ -72,6 +72,8 @@ We're going to start to bring all the pieces together! Today you will do an **in
 
     Note that you need to replace that `YOURNAME...` thing with your name. For example: `flint_week7`. 
 
+    Remember that the `uses` block tells GitHub Actions to pull the code from that repository and run it within the context of the job. `actions/checkout` is a very common action that you will probably use more than any other action - because its job is to get your code from GitHub onto the runner!
+
     Also notice that these commands are very much like the ones we ran while we were playing with Docker. All we're doing here is having the GitHub runner run the commands for us.
 
 9. Double-check your action file. Remember that **indentation matters!**
