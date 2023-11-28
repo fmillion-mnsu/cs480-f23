@@ -102,9 +102,9 @@ Another way is to add the variable and its value to the GitHub environment file 
 
 1. Edit your Dockerfile to print out all environment variables in your message. Add these lines before the `CMD` line:
 
-    ARG SOME_VARIABLE
-    RUN echo "Environment variables: " >> /message.txt
-    RUN env >> /message.txt
+        ARG SOME_VARIABLE
+        RUN echo "Environment variables: " >> /message.txt
+        RUN env >> /message.txt
 
     Change `SOME_VARIABLE` to a variable name of your choice. Variable names should be capitalized, must not contain spaces, and cannot start with a number.
 
