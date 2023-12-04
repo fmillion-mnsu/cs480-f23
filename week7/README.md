@@ -2,7 +2,7 @@
 
 ## Quiz
 
-There is a [**second take-home quiz**](QUIZ2.md) at the end of this week!
+There is a [**second take-home quiz**](QUIZ2.md) at the end of *finals* week!
 
 ## Presentations
 
